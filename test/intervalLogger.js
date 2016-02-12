@@ -51,4 +51,13 @@ describe("intervalLogger", function() {
 		clock.tick(101);
     expect(reportStub.callCount).to.equal(1);
   });
+
+  it('will report NaN for known subkeys when none have been reported', function() {
+		var logger = intervalLogger.create("test",reportStub,100,true);
+		logger.increment();
+		clock.tick(101);
+		expect(reportStub.withArgs('test',{'count': 1}).callCount).to.equal(1);
+		clock.tick(101);
+		expect(reportStub.withArgs('test',{'count': NaN}).callCount).to.equal(1);
+  });
 });
