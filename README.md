@@ -12,6 +12,8 @@ Two functions are supported:
    Computes count, average, standard deviation, and variance. For computing
    gauge data types (response time, etc).
 
+[![build status](https://secure.travis-ci.org/dsummersl/interval-logger.png)](http://travis-ci.org/dsummersl/interval-logger)
+
 Build & Test
 ------------
 
