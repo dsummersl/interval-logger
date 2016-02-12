@@ -44,4 +44,11 @@ describe("intervalLogger", function() {
     expect(reportStub.callCount).to.equal(1);
     expect(logger.subkeys).to.deep.equal({ 'count': NaN });
   });
+
+  it('respects intervalMS parameter', function() {
+		var logger = intervalLogger.create("test",reportStub,100);
+		logger.increment();
+		clock.tick(101);
+    expect(reportStub.callCount).to.equal(1);
+  });
 });

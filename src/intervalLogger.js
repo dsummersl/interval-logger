@@ -107,10 +107,11 @@ CountLogger.prototype.average = function(subkey, value) {
 //   reporter: A 'report' callback. If not provided send to console.log. Called
 //             with two parameters: the metric name and a dictionary of keys
 //             that were sent to graphite.
+//   intervalMS = Number of milliseconds between aggregations (in ms).
 //   reportZeros = if true, report 0s otherwise don't.
 //
 // Returns a logger.
-module.exports.create = function(metric,reporter,reportZeros) {
+module.exports.create = function(metric,reporter,intervalMS,reportZeros) {
   'use strict';
   if (!reporter) {
     reporter = function(metric, values) {
@@ -118,5 +119,5 @@ module.exports.create = function(metric,reporter,reportZeros) {
       console.log(metric +': '+ values.join(', '));
     };
   }
-  return new CountLogger(metric, reportZeros, DEFAULT_INTERVAL_MS, reporter);
+  return new CountLogger(metric, reportZeros, intervalMS || DEFAULT_INTERVAL_MS, reporter);
 };
