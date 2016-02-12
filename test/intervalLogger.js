@@ -36,4 +36,12 @@ describe("intervalLogger", function() {
 		expect(reportStub.callCount).to.equal(1);
 		expect(reportStub.withArgs('test',{'count': 1}).callCount).to.equal(1);
 	});
+
+  it('resets counts after the interval', function() {
+		var logger = intervalLogger.create("test",reportStub);
+		logger.increment();
+		clock.tick(5000);
+    expect(reportStub.callCount).to.equal(1);
+    expect(logger.subkeys).to.deep.equal({ 'count': NaN });
+  });
 });

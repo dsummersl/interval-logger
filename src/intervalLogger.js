@@ -24,7 +24,7 @@ function CountLogger(metric, reportZeros, intervalMS, callback) {
   var self = this;
   var resetFn = function() {
     self._send();
-    _.forEach(self.subkeys,function(v) {
+    _.forEach(_.keys(self.subkeys),function(v) {
       self.subkeys[v] = NaN;
     });
   };
@@ -45,7 +45,7 @@ CountLogger.prototype._send = function() {
     return;
   }
 
-  dataToSend = _.pickBy(dataToSend, _.isNumber);
+  dataToSend = _.omitBy(dataToSend, _.isNaN);
   if (_.keys(dataToSend).length === 0) {
     return;
   }
@@ -112,5 +112,11 @@ CountLogger.prototype.average = function(subkey, value) {
 // Returns a logger.
 module.exports.create = function(metric,reporter,reportZeros) {
   'use strict';
+  if (!reporter) {
+    reporter = function(metric, values) {
+      var values = _.map(values, function(v,k) { return k +'='+ v });
+      console.log(metric +': '+ values.join(', '));
+    };
+  }
   return new CountLogger(metric, reportZeros, DEFAULT_INTERVAL_MS, reporter);
 };

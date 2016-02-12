@@ -37,6 +37,9 @@ specified:
     // after 1 second, "test: count=1" is logged to the console.
     // after 2 seconds, "test: count=NaN" is logged to the console.
 
+    // cleanup
+    ilog.stopInterval();
+
 Primarily though this is intended to tie into some external logging or logging
 service (say graphite, newrelic, bunyan or the like):
 
