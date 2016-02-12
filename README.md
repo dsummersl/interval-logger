@@ -62,7 +62,7 @@ var intervalLogger = require('intervalLogger');
 var ilog = intervalLogger.create('example',function(metric, values) {
   // after 1 second...
   //   metric='example'
-  //   values={'count': 1}
+  //   values={'count': 1, 'foo.count': 1, 'foo.average': 0.43, 'foo.std': 0, 'foo.variance':0 }
 
   // ...send this valuable information to someone important...
 });
