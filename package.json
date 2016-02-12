@@ -1,0 +1,36 @@
+{
+  "name": "interval-logger",
+  "version": "0.1.0",
+  "description": "Report aggregate statistics (count, average) over a defined interval.",
+  "main": "src/intervalLogger.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dsummersl/interval-logger.git"
+  },
+  "keywords": [
+    "logger",
+    "reporter",
+    "statistics",
+    "binning",
+    "average",
+    "sum",
+    "aggregate"
+  ],
+  "author": "Dane Summers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dsummersl/interval-logger/issues"
+  },
+  "homepage": "https://github.com/dsummersl/interval-logger#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5",
+    "sinon": "^1.17.3"
+  },
+  "dependencies": {
+    "lodash": "^4.3.0"
+  }
+}
