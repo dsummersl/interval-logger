@@ -18,6 +18,7 @@ var DEFAULT_INTERVAL_MS = 1000;
 function CountLogger(metric, reportZeros, intervalMS, callback) {
   'use strict';
   this.subkeys = {};
+  this.subkeyData = {};
   this.metric = metric;
   this.reportZeros = reportZeros;
   this.callback = callback;
@@ -84,16 +85,45 @@ CountLogger.prototype.increment = function(subkey,count) {
   this.subkeys[target] += addition;
 };
 
-
-// Set a value that should be reported as an average.
-//
-// The average of all the values reported over the interval that this logger
-// will be reported.
+// Set a value that should have statistics calculated on it (average, std, etc)
 //
 // Useful for gauge like things (number of active requests at the moment, etc),
 // rather than events (increment is better for that).
-CountLogger.prototype.average = function(subkey, value) {
+//
+// Creates the following values based on the 'subkey':
+//  subkey.count    = number of times this subkey was called in the interval
+//                    (eg, number of numbers).
+//  subkey.average  = the average of the numbers in the interval.
+//  subkey.std      = standard deviation of the numbers.
+//  subkey.variance = variance of the numbers.
+CountLogger.prototype.statistics = function(subkey, value) {
   'use strict';
+  if (!this.subkeys[subkey +'.count']) {
+    this.subkeys[subkey +'.count'] = 0;
+  }
+
+  // See Knuth TAOCP vol 2, 3rd edition, page 232 -- running stats.
+  var n = ++this.subkeys[subkey +'.count'];
+  var oldM, newM, oldS, newS;
+
+  if (n === 1) {
+    oldM = newM = value;
+    oldS = newS = 0.0;
+  } else {
+    oldM = this.subkeyData[subkey +'.M'];
+    oldS = this.subkeyData[subkey +'.S'];
+
+    newM = oldM + (value - oldM)/n;
+    newS = oldS + (value - oldM)*(value - newM);
+  }
+
+  // next iteration
+  this.subkeyData[subkey +'.M'] = oldM;
+  this.subkeyData[subkey +'.S'] = oldS;
+
+  this.subkeys[subkey +'.average'] = newM;
+  this.subkeys[subkey +'.variance'] = (n > 1) ? newS/(n - 1): 0.0;
+  this.subkeys[subkey +'.std'] = Math.sqrt(this.subkeys[subkey +'.variance']);
 };
 
 /////////////////////////////////////////////////////////////////////////////////

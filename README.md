@@ -5,6 +5,13 @@ A generic class that reports aggregate key/value data over a specific interval.
 This is useful for high volume metrics that need some aggregation (over time) to
 minimize network traffic, say.
 
+Two functions are supported:
+ * `increment(key)`: increment a key, and report its sum over the interval
+   (reset to 0 after the intervel). For computing hit-count events.
+ * `statistics(key,value)`: compute running statistics of values for a key.
+   Computes count, average, standard deviation, and variance. For computing
+   gauge data types (response time, etc).
+
 Build & Test
 ------------
 
@@ -30,6 +37,9 @@ specified:
     ilog.increment('foo',2);
     // after 1 second, "test: foo=3" is logged to the console.
 
+    ilog.statistics('bar',Math.random())
+    // after another second, "test: bar.count=1 bar.average=0.433123948 bar.std=0.0 bar.variance=0.0"
+
     // if you want to report ALL keys every second even if they haven't been
     // incremented:
     intervalLogger = require('intervalLogger',null,true);
@@ -53,3 +63,4 @@ service (say graphite, newrelic, bunyan or the like):
     });
 
     ilog.increment();
+    ilog.statistics('foo',Math.random())
