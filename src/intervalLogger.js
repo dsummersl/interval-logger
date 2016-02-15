@@ -29,7 +29,6 @@ function CountLogger(metric, reportZeros, intervalMS, callback) {
       self.subkeys[v] = NaN;
     });
   };
-  resetFn();
   this.intervalId = setInterval(resetFn,intervalMS);
 }
 
@@ -79,7 +78,7 @@ CountLogger.prototype.increment = function(subkey,count) {
   if (isFinite(count)) {
     addition = count;
   }
-  if (!_.has(this.subkeys,target)) {
+  if (!_.has(this.subkeys,target) || _.isNaN(this.subkeys[target])) {
     this.subkeys[target] = 0;
   }
   this.subkeys[target] += addition;

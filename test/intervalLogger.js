@@ -50,15 +50,20 @@ describe('intervalLogger', function() {
     logger.increment();
     clock.tick(101);
     expect(reportStub.callCount).to.equal(1);
+    logger.increment();
+    clock.tick(101);
+    expect(reportStub.callCount).to.equal(2);
+    expect(reportStub.getCall(1).args).to.deep.equal(['test',{'count': 1}]);
   });
 
-  it('will report NaN for known subkeys when none have been reported', function() {
+  it('will report null for known subkeys when none have been reported', function() {
     var logger = intervalLogger.create('test',reportStub,100,true);
     logger.increment();
     clock.tick(101);
-    expect(reportStub.withArgs('test',{'count': 1}).callCount).to.equal(1);
+    expect(reportStub.getCall(0).args).to.deep.equal(['test',{'count':1}]);
     clock.tick(101);
-    expect(reportStub.withArgs('test',{'count': NaN}).callCount).to.equal(1);
+    expect(reportStub.callCount).to.equal(2);
+    expect(reportStub.getCall(1).args).to.deep.equal(['test',{'count': NaN}]);
   });
 
   it('statistics() computes the stats on a #', function() {

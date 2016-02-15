@@ -1,6 +1,6 @@
 {
   "name": "interval-logger",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Report aggregate statistics (count, average) over a defined interval.",
   "main": "src/intervalLogger.js",
   "scripts": {
